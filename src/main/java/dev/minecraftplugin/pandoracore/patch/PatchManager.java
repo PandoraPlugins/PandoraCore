@@ -39,6 +39,10 @@ public class PatchManager {
         }
     }
 
+    public void disablePatch() {
+        // todo: disable the patch.
+    }
+
     public Config<PatchData> getPatchesData() {
         return patchesData;
     }
