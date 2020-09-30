@@ -3,7 +3,6 @@ package dev.minecraftplugin.pandoracore.patch.patches.gameplay;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInChat;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class InvisibilityHitPatch extends Patch<PacketPlayInChat> {
+public class InvisibilityHitPatch extends Patch<Packet<?>> {
     public InvisibilityHitPatch() {
         super("InvisibilityHitPatch", "Invisible players turn visible when hit",
                 false, false, null, true);

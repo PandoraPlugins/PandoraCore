@@ -1,6 +1,8 @@
 name: PandoraCore
 version: ${project.version}
 main: dev.minecraftplugin.pandoracore.PandoraCore
-softdepend: [ UltraPermissions, Factions, FAIO-Factions-All-In-One ]
 authors: [ X1XX, ProNanigans ]
 description: Pandora Core
+permissions:
+  pandoracore.patchmanager:
+    description: Allows you to access the patch manager.

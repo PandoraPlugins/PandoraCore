@@ -1,6 +1,7 @@
 package dev.minecraftplugin.pandoracore.patch;
 
 import dev.minecraftplugin.pandoracore.PandoraCore;
+import dev.minecraftplugin.pandoracore.configuration.Config;
 import dev.minecraftplugin.pandoracore.packethandler.PacketListener;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.event.Listener;
@@ -64,4 +65,8 @@ public abstract class Patch<T extends Packet<?>> extends PacketListener<T> imple
     public abstract void enable(PandoraCore core);
 
     public abstract void disable(PandoraCore core);
+
+    public Config<?> getConfiguration() {
+        return null;
+    }
 }

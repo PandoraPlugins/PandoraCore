@@ -1,9 +1,6 @@
 package dev.minecraftplugin.pandoracore.patch;
 
-import dev.minecraftplugin.pandoracore.patch.patches.exploit.CreativeItemPatch;
-import dev.minecraftplugin.pandoracore.patch.patches.exploit.CustomPayloadPatch;
-import dev.minecraftplugin.pandoracore.patch.patches.exploit.InvalidSignsPatch;
-import dev.minecraftplugin.pandoracore.patch.patches.exploit.NullAdressPatch;
+import dev.minecraftplugin.pandoracore.patch.patches.exploit.*;
 import dev.minecraftplugin.pandoracore.patch.patches.gameplay.CombatLoggedDeathPatch;
 import dev.minecraftplugin.pandoracore.patch.patches.gameplay.FactionsTPDenyPatch;
 import dev.minecraftplugin.pandoracore.patch.patches.gameplay.InvisibilityHitPatch;
@@ -14,7 +11,9 @@ public enum EPatch {
     CREATIVEITEM(new CreativeItemPatch()),
     CUSTOMPAYLOAD(new CustomPayloadPatch()),
     INVALIDSIGN(new InvalidSignsPatch()),
-    NULLADDRESS(new NullAdressPatch()),
+    NULLADDRESS(new NullAddressPatch()),
+    UUIDSPOOFPATCH(new UUIDSpoofPatch()),
+    SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),
     COMBATLOGDEATH(new CombatLoggedDeathPatch());
 
     private final Patch<?> patch;
@@ -23,15 +22,15 @@ public enum EPatch {
         this.patch = patch;
     }
 
-    public Patch<?> getPatch() {
-        return patch;
-    }
-
     public static EPatch getValue(String name) {
         for (EPatch value : EPatch.values()) {
-            if (value.patch.getName().equals(name))
+            if (value.patch.getName().equalsIgnoreCase(name))
                 return value;
         }
         return null;
+    }
+
+    public Patch<?> getPatch() {
+        return patch;
     }
 }

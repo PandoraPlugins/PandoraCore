@@ -17,6 +17,10 @@ public class ConfigManager {
     public <T> Config<T> loadConfig(String name, T defaults) {
         return new Config<T>(name, gson, plugin, defaults);
     }
+
+    public Gson getGson() {
+        return gson;
+    }
 }
 
 

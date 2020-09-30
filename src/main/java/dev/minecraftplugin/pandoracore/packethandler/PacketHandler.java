@@ -6,7 +6,7 @@ import io.netty.channel.ChannelPromise;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,8 @@ public class PacketHandler extends ChannelDuplexHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerLoginEvent event) {
+
         ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.networkManager.channel.pipeline()
                 .addBefore("packethandler_pandoracore", "pandoracore_channel", this);
     }
