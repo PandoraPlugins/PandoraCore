@@ -10,7 +10,7 @@ public class PatchData implements Serializable {
     public PatchData() {
         enabled = new HashSet<>();
         for (EPatch value : EPatch.values()) {
-            enabled.add(new ToggleablePatch(value.name(), true));
+            enabled.add(new ToggleablePatch(value.getPatch().getName(), true));
         }
     }
 

@@ -14,11 +14,10 @@ public class PatchManager {
     private final PatchGUI gui;
 
     public PatchManager(PandoraCore core) {
-        gui = new PatchGUI();
         this.core = core;
         System.out.println(FormatUtil.getSeparator("PATCHES"));
         System.out.println(FormatUtil.color("Loading Patches"));
-        patchesData = core.getConfigManager().loadConfig("enabledPatches", new PatchData());
+        patchesData = core.getConfigManager().loadConfig("/patches/enabledPatches", new PatchData());
         for (ToggleablePatch toggleablePatch : patchesData.getConfiguration().enabled) {
             if (toggleablePatch.enabled) {
                 EPatch patch = EPatch.getValue(toggleablePatch.name);
@@ -29,6 +28,7 @@ public class PatchManager {
                 enablePatch(patch);
             }
         }
+        gui = new PatchGUI();
 
     }
 
@@ -38,11 +38,11 @@ public class PatchManager {
 
     public void disablePatch(EPatch patch) {
         HandlerList.unregisterAll(patch.getPatch());
-        PacketHandler.getInstance().unRegisterListener(patch.getPatch());
+        PacketHandler.unRegisterListener(patch.getPatch());
         patch.getPatch().setEnabled(false);
         patch.getPatch().disable(core);
         patchesData.getConfiguration().enabled.iterator().forEachRemaining(data -> {
-            if (data.name.equals(patch.getPatch().getName())) {
+            if (data.name.equalsIgnoreCase(patch.getPatch().getName())) {
                 data.enabled = false;
             }
         });
@@ -61,9 +61,14 @@ public class PatchManager {
         if (patch.getPatch().isListener())
             Bukkit.getPluginManager().registerEvents(patch.getPatch(), core);
         if (patch.getPatch().isPacket())
-            PacketHandler.getInstance().registerListener(patch.getPatch());
+            PacketHandler.registerListener(patch.getPatch());
         patch.getPatch().setEnabled(true);
         patch.getPatch().enable(core);
+        patchesData.getConfiguration().enabled.iterator().forEachRemaining(data -> {
+            if (data.name.equalsIgnoreCase(patch.getPatch().getName())) {
+                data.enabled = true;
+            }
+        });
     }
 
     public void disable() {

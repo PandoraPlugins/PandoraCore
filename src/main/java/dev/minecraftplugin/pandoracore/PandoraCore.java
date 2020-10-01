@@ -1,7 +1,9 @@
 package dev.minecraftplugin.pandoracore;
 
+import com.azortis.azortislib.experimental.inventory.GUIManager;
 import dev.minecraftplugin.pandoracore.commands.PandoraCoreCommand;
 import dev.minecraftplugin.pandoracore.configuration.ConfigManager;
+import dev.minecraftplugin.pandoracore.packethandler.PacketChannelListener;
 import dev.minecraftplugin.pandoracore.packethandler.PacketHandler;
 import dev.minecraftplugin.pandoracore.patch.PatchManager;
 import org.bukkit.Bukkit;
@@ -27,7 +29,8 @@ public final class PandoraCore extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        Bukkit.getPluginManager().registerEvents(PacketHandler.getInstance(), this);
+        GUIManager.getInstance(this);
+        Bukkit.getPluginManager().registerEvents(new PacketChannelListener(), this);
         configManager = new ConfigManager(this);
         patchManager = new PatchManager(this);
         instance = this;

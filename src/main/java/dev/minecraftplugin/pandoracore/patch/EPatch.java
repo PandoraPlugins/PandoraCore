@@ -1,9 +1,7 @@
 package dev.minecraftplugin.pandoracore.patch;
 
 import dev.minecraftplugin.pandoracore.patch.patches.exploit.*;
-import dev.minecraftplugin.pandoracore.patch.patches.gameplay.CombatLoggedDeathPatch;
-import dev.minecraftplugin.pandoracore.patch.patches.gameplay.FactionsTPDenyPatch;
-import dev.minecraftplugin.pandoracore.patch.patches.gameplay.InvisibilityHitPatch;
+import dev.minecraftplugin.pandoracore.patch.patches.gameplay.*;
 
 public enum EPatch {
     INVIS(new InvisibilityHitPatch()),
@@ -14,6 +12,8 @@ public enum EPatch {
     NULLADDRESS(new NullAddressPatch()),
     UUIDSPOOFPATCH(new UUIDSpoofPatch()),
     SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),
+    REMOVEDEATH(new RemoveDeathScreenPatch()),
+    XPBARPATCH(new XPBarPatch()),
     COMBATLOGDEATH(new CombatLoggedDeathPatch());
 
     private final Patch<?> patch;

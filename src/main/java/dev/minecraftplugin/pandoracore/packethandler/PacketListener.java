@@ -3,6 +3,7 @@ package dev.minecraftplugin.pandoracore.packethandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.server.v1_8_R3.Packet;
+import org.bukkit.entity.Player;
 
 public class PacketListener<T extends Packet<?>> {
     private final boolean ignoreCancelled;
@@ -23,10 +24,11 @@ public class PacketListener<T extends Packet<?>> {
      * @param context     the context of the packet
      * @param isCancelled whether the packet has been cancelled.
      * @param packet      The packet
+     * @param player      the player sending the packet to the server
      * @return whether you wish for the packet to be cancelled or not.
      */
-    public boolean read(boolean isCancelled, Object packet, ChannelHandlerContext context) {
-        return false;
+    public T read(boolean isCancelled, Object packet, ChannelHandlerContext context, Player player) {
+        return null;
     }
 
     public boolean doesIgnoreCancelled() {
@@ -40,9 +42,10 @@ public class PacketListener<T extends Packet<?>> {
      * @param context     the channel context
      * @param packet      the packet
      * @param promise     the promise
+     * @param player      the player the server is sending the packet to
      * @return whether you wish for the packet to be cancelled or not.
      */
-    public boolean write(boolean isCancelled, Object packet, ChannelHandlerContext context, ChannelPromise promise) {
-        return false;
+    public T write(boolean isCancelled, Object packet, ChannelHandlerContext context, ChannelPromise promise, Player player) {
+        return null;
     }
 }
