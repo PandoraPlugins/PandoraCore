@@ -3,6 +3,9 @@ version: ${project.version}
 main: dev.minecraftplugin.pandoracore.PandoraCore
 authors: [ X1XX, ProNanigans ]
 description: Pandora Core
+softdepend: [ShopGUIPlus]
 permissions:
   pandoracore.patchmanager:
     description: Allows you to access the patch manager.
+  pandoracore.modulemanager:
+    description: Allows you to access the module manager.

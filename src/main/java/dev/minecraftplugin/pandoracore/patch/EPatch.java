@@ -14,7 +14,8 @@ public enum EPatch {
     SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),
     REMOVEDEATH(new RemoveDeathScreenPatch()),
     XPBARPATCH(new XPBarPatch()),
-    COMBATLOGDEATH(new CombatLoggedDeathPatch());
+    COMBATLOGDEATH(new CombatLoggedDeathPatch()),
+    COOLDOWN(new CooldownPatch());
 
     private final Patch<?> patch;
 

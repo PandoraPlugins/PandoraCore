@@ -10,23 +10,26 @@ import dev.minecraftplugin.pandoracore.PandoraCore;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PandoraCoreCommand implements ICommandExecutor, ITabCompleter {
     public PandoraCoreCommand(PandoraCore core) {
         Command c = new CommandBuilder()
-                .setUsage("/pandoracore")
+                .setUsage("/core")
                 .setPlugin(core)
-                .setName("pandoracore")
+                .setName("core")
                 .setExecutor(this)
                 .setTabCompleter(this)
                 .setDescription("Pandora core command")
-                .addSubCommand(new SubCommandBuilder()
-                        .setExecutor(new PandoraPatchCommand(core))
-                        .setName("patches"))
-                .addAliases("pc", "core").build();
-        CommandInjector.injectCommand("pandoracore", c, true);
+                .addSubCommands(new SubCommandBuilder()
+                                .setExecutor(new PandoraPatchCommand(core))
+                                .setName("patches"),
+                        new SubCommandBuilder()
+                                .setExecutor(new PandoraModuleCommand(core))
+                                .setName("modules")
+                ).build();
+        CommandInjector.injectCommand("core", c, true);
     }
 
     @Override
@@ -36,9 +39,13 @@ public class PandoraCoreCommand implements ICommandExecutor, ITabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings, Location location) {
+        List<String> list = new ArrayList<>();
         if (commandSender.hasPermission("pandoracore.patchmanager")) {
-            return Collections.singletonList("patches");
+            list.add("patches");
         }
-        return null;
+        if (commandSender.hasPermission("pandoracore.modulemanager")) {
+            list.add("modules");
+        }
+        return list;
     }
 }

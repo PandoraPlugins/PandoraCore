@@ -1,4 +1,4 @@
-package dev.minecraftplugin.pandoracore.patch;
+package dev.minecraftplugin.pandoracore.module;
 
 import com.azortis.azortislib.experimental.inventory.*;
 import com.azortis.azortislib.experimental.inventory.impl.v1_15.GUIBuilder;
@@ -6,11 +6,10 @@ import dev.minecraftplugin.pandoracore.PandoraCore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-// All the commented code is because I tried to use a pageable gui, but it didn't work, so it's single gui for now.
-public class PatchGUI {
+public class ModuleGUI {
     private final GUI gui;
 
-    public PatchGUI() {
+    public ModuleGUI() {
         gui = createGUI();
     }
 
@@ -21,42 +20,42 @@ public class PatchGUI {
 //                    ((PageableGUIBuilder) gui).pages = (EPatch.values().length / 45) + 1 + (EPatch.values().length % 45 == 0 ? 0 : 1);
                     gui.isConfigurable = false;
                     gui.isGlobal = false;
-                    gui.uniqueName = "PCPatchManager";
-                    gui.inventoryTitle = "&6Patches";
+                    gui.uniqueName = "PCModuleManager";
+                    gui.inventoryTitle = "&6Modules";
 
-                    for (int i = 0; i < EPatch.values().length; i++) {
+                    for (int i = 0; i < EModule.values().length; i++) {
 //                        final int page = (i / 45) + 1;
                         final int finalI = i;
-                        final EPatch itemPatch = EPatch.values()[i];
+                        final EModule itemPatch = EModule.values()[i];
                         gui.item().with(item -> {
-                            item.itemName = itemPatch.getPatch().getName();
+                            item.itemName = itemPatch.getModule().getName();
 //                            ((PageableGUIBuilder.PageableItemBuilder) item).page = page;
                             item.slot = finalI /*% 45*/;
                             item.itemStack = StackBuilder.start(Material.STAINED_GLASS_PANE)
-                                    .name("&" + (itemPatch.getPatch().isEnabled() ? "a" : "c")
-                                            + itemPatch.getPatch().getName())
-                                    .data((short) (itemPatch.getPatch().isEnabled() ? 5 : 14))
-                                    .lore("&bClick me to enable/disable this patch!", "&l",
-                                            "&b" + itemPatch.getPatch().getDescription())
+                                    .name("&" + (itemPatch.getModule().isEnabled() ? "a" : "c")
+                                            + itemPatch.getModule().getName())
+                                    .data((short) (itemPatch.getModule().isEnabled() ? 5 : 14))
+                                    .lore("&bClick me to enable/disable this module!", "&l",
+                                            "&b" + itemPatch.getModule().getDescription())
                                     .build();
                             item.action = clickEvent -> {
                                 clickEvent.setCancelled(true);
-                                EPatch patch = EPatch.getValue(ChatColor.stripColor(
+                                EModule module = EModule.getValue(ChatColor.stripColor(
                                         ((Page) clickEvent.getInventory().getHolder())
                                                 .getGUI().getItems()[clickEvent.getSlot()].getItemStack().getItemMeta()
                                                 .getDisplayName()));
-                                if (patch == null) {
+                                if (module == null) {
                                     System.out.println("Error getting the patch!");
                                     return;
                                 }
-                                if (patch.getPatch().isEnabled())
-                                    PandoraCore.getInstance().getPatchManager().disablePatch(patch);
-                                else PandoraCore.getInstance().getPatchManager().enablePatch(patch);
+                                if (module.getModule().isEnabled())
+                                    PandoraCore.getInstance().getModuleManager().disableModule(module);
+                                else PandoraCore.getInstance().getModuleManager().enableModule(module);
                                 Item aItem = new Item(StackBuilder.start(((Page) clickEvent.getInventory().getHolder())
                                         .getGUI().getItems()[clickEvent.getSlot()].getItemStack())
-                                        .data((short) (itemPatch.getPatch().isEnabled() ? 5 : 14))
-                                        .name("&" + (itemPatch.getPatch().isEnabled() ? "a" : "c")
-                                                + itemPatch.getPatch().getName())
+                                        .data((short) (itemPatch.getModule().isEnabled() ? 5 : 14))
+                                        .name("&" + (itemPatch.getModule().isEnabled() ? "a" : "c")
+                                                + itemPatch.getModule().getName())
                                         .build(),
                                         ((Page) clickEvent.getInventory().getHolder()).getGUI().getItems()
                                                 [clickEvent.getSlot()].getAction());
@@ -119,4 +118,5 @@ public class PatchGUI {
     public GUI getGui() {
         return gui;
     }
+
 }
