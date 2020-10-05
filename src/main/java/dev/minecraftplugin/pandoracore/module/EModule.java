@@ -1,8 +1,11 @@
 package dev.minecraftplugin.pandoracore.module;
 
-public enum EModule {
-    ;
+import dev.minecraftplugin.pandoracore.module.modules.combatlog.CombatLogModule;
 
+public enum EModule {
+    //    MINESHOP(new ShopModule()),
+    //COMBATLOG(new CombatLogModule());
+        ;
     private final Module<?> module;
 
     EModule(Module<?> module) {

@@ -5,16 +5,14 @@ import dev.minecraftplugin.pandoracore.patch.patches.gameplay.*;
 
 public enum EPatch {
     INVIS(new InvisibilityHitPatch()),
-    TPDENYFAC(new FactionsTPDenyPatch()),
     CREATIVEITEM(new CreativeItemPatch()),
-    CUSTOMPAYLOAD(new CustomPayloadPatch()),
     INVALIDSIGN(new InvalidSignsPatch()),
     NULLADDRESS(new NullAddressPatch()),
     UUIDSPOOFPATCH(new UUIDSpoofPatch()),
     SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),
     REMOVEDEATH(new RemoveDeathScreenPatch()),
     XPBARPATCH(new XPBarPatch()),
-    COMBATLOGDEATH(new CombatLoggedDeathPatch()),
+    NOQUILL(new NoCraftQuillPatch()),
     COOLDOWN(new CooldownPatch());
 
     private final Patch<?> patch;

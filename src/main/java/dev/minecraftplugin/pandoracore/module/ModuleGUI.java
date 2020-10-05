@@ -1,118 +1,80 @@
 package dev.minecraftplugin.pandoracore.module;
 
-import com.azortis.azortislib.experimental.inventory.*;
-import com.azortis.azortislib.experimental.inventory.impl.v1_15.GUIBuilder;
+import com.azortis.azortislib.experimental.inventory.GUI;
+import com.azortis.azortislib.experimental.inventory.GUIBuilder;
+import com.azortis.azortislib.experimental.inventory.View;
+import com.azortis.azortislib.experimental.inventory.item.Item;
+import com.azortis.azortislib.experimental.inventory.item.ItemBuilder;
 import dev.minecraftplugin.pandoracore.PandoraCore;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 public class ModuleGUI {
-    private final GUI gui;
+    private GUI gui;
 
     public ModuleGUI() {
         gui = createGUI();
     }
 
     private GUI createGUI() {
-        return GUIManager.getInstance().getEngine().createGUI(
-                new GUIBuilder().with(gui -> {
-                    gui.inventorySize = 54;
-//                    ((PageableGUIBuilder) gui).pages = (EPatch.values().length / 45) + 1 + (EPatch.values().length % 45 == 0 ? 0 : 1);
-                    gui.isConfigurable = false;
-                    gui.isGlobal = false;
-                    gui.uniqueName = "PCModuleManager";
-                    gui.inventoryTitle = "&6Modules";
-
-                    for (int i = 0; i < EModule.values().length; i++) {
-//                        final int page = (i / 45) + 1;
-                        final int finalI = i;
-                        final EModule itemPatch = EModule.values()[i];
-                        gui.item().with(item -> {
-                            item.itemName = itemPatch.getModule().getName();
-//                            ((PageableGUIBuilder.PageableItemBuilder) item).page = page;
-                            item.slot = finalI /*% 45*/;
-                            item.itemStack = StackBuilder.start(Material.STAINED_GLASS_PANE)
-                                    .name("&" + (itemPatch.getModule().isEnabled() ? "a" : "c")
-                                            + itemPatch.getModule().getName())
-                                    .data((short) (itemPatch.getModule().isEnabled() ? 5 : 14))
-                                    .lore("&bClick me to enable/disable this module!", "&l",
-                                            "&b" + itemPatch.getModule().getDescription())
+        final int pageSize = 45;
+        final String pageName = "ModuleGUI ";
+        int pages = (EModule.values().length / pageSize) + 1;
+        GUIBuilder builder = new GUIBuilder("ModuleGUI");
+        for (int i = 0; i < pages; i++) {
+            int finalI = i;
+            builder.addPage(pageSize)
+                    .with(page -> {
+                        page.isGlobal = true;
+                        page.page = finalI;
+                        page.name = pageName + "Page: &b" + finalI;
+                        Item[] items = new Item[pageSize];
+                        for (int ia = 0; ia < EModule.values().length; ia++) {
+                            final boolean enabled = EModule.values()[ia].getModule().isEnabled();
+                            ItemStack itemStack = ItemBuilder.start(Material.STAINED_GLASS_PANE)
+                                    .data(enabled ? (short) 5 : (short) 14)
+                                    .name((enabled ? "&a" : "&c") + EModule.values()[ia].getModule().getName())
+                                    .lore(enabled ? "&a&oENABLED" : "&c&oDISABLED",
+                                            "&b&o" + EModule.values()[ia].getModule().getDescription()
+                                            , "&b&oRequires: " + Arrays.toString(EModule.values()[ia].getModule().getDependencies()),
+                                            (enabled ? "&b&nClick me to &c&nDISABLE&b&n this patch!"
+                                                    : "&b&nClick me to &a&nENABLE&b&n this patch!"))
                                     .build();
-                            item.action = clickEvent -> {
+                            final int finalIa = ia;
+                            final BiConsumer<InventoryClickEvent, View> action = (clickEvent, view) -> {
                                 clickEvent.setCancelled(true);
-                                EModule module = EModule.getValue(ChatColor.stripColor(
-                                        ((Page) clickEvent.getInventory().getHolder())
-                                                .getGUI().getItems()[clickEvent.getSlot()].getItemStack().getItemMeta()
-                                                .getDisplayName()));
-                                if (module == null) {
-                                    System.out.println("Error getting the patch!");
-                                    return;
+                                if (EModule.values()[finalIa].getModule().isEnabled()) {
+                                    EModule.values()[finalIa].getModule().disable(PandoraCore.getInstance());
+                                } else {
+                                    EModule.values()[finalIa].getModule().enable(PandoraCore.getInstance());
                                 }
-                                if (module.getModule().isEnabled())
-                                    PandoraCore.getInstance().getModuleManager().disableModule(module);
-                                else PandoraCore.getInstance().getModuleManager().enableModule(module);
-                                Item aItem = new Item(StackBuilder.start(((Page) clickEvent.getInventory().getHolder())
-                                        .getGUI().getItems()[clickEvent.getSlot()].getItemStack())
-                                        .data((short) (itemPatch.getModule().isEnabled() ? 5 : 14))
-                                        .name("&" + (itemPatch.getModule().isEnabled() ? "a" : "c")
-                                                + itemPatch.getModule().getName())
-                                        .build(),
-                                        ((Page) clickEvent.getInventory().getHolder()).getGUI().getItems()
-                                                [clickEvent.getSlot()].getAction());
-                                clickEvent.getInventory().setItem(clickEvent.getSlot(), aItem.getItemStack());
-                                ((Page) clickEvent.getInventory().getHolder()).getGUI().getItems()[clickEvent.getSlot()] =
-                                        aItem;
-
+                                ItemStack newStack = ItemBuilder.start(Material.STAINED_GLASS_PANE)
+                                        .data(enabled ? (short) 5 : (short) 14)
+                                        .name((enabled ? "&a" : "&c") + EModule.values()[finalIa].getModule().getName())
+                                        .lore(enabled ? "&a&oENABLED" : "&c&oDISABLED",
+                                                "&b&o" + EModule.values()[finalIa].getModule().getDescription()
+                                                , "&b&oRequires: " +
+                                                        Arrays.toString(EModule.values()[finalIa].getModule().getDependencies()),
+                                                (enabled ? "&b&nClick me to &c&nDISABLE&b&n this patch!"
+                                                        : "&b&nClick me to &a&nENABLE&b&n this patch!"))
+                                        .build();
+                                view.getInventory().setItem(clickEvent.getSlot(), newStack);
+                                Item item = view.getPage().getItems()[clickEvent.getSlot()];
+                                view.getPage().getItems()[clickEvent.getSlot()]
+                                        = new Item(newStack, item.getUniqueName(), item.getEventConsumer());
                             };
-                        }).add();
-                    }
-                    for (int slot = 45; slot < 54; slot++) {
-                        int finalSlot = slot;
-//                            if (slot == 45) {
-//                                gui.item().with(item -> {
-//                                    item.itemName = "BackButton" + finalI;
-//                                    ((PageableGUIBuilder.PageableItemBuilder) item).page = finalI;
-//                                    item.slot = finalSlot;
-//                                    item.action = clickEvent -> {
-//                                        clickEvent.setCancelled(true);
-//                                        if (finalI > 1) {
-//                                            clickEvent.getWhoClicked()
-//                                                    .openInventory(((PageableGUI) ((Page) clickEvent.getInventory().getHolder()).getGUI())
-//                                                            .getInventory(finalI - 1));
-//                                        }
-//                                    };
-//                                    item.itemStack = StackBuilder.start(Material.STAINED_GLASS_PANE)
-//                                            .name("&bBack Button").data((short) 3).build();
-//
-//                                }).add();
-//                            } else if (slot == 53) {
-//                                gui.item().with(item -> {
-//                                    item.itemName = "ForwardButton" + finalI;
-//                                    ((PageableGUIBuilder.PageableItemBuilder) item).page = finalI;
-//                                    item.slot = finalSlot;
-//                                    item.action = clickEvent -> {
-//                                        if (finalI < ((PageableGUIBuilder) gui).pages) {
-//                                            clickEvent.getWhoClicked()
-//                                                    .openInventory(((PageableGUI) ((Page) clickEvent.getInventory().getHolder()).getGUI())
-//                                                            .getInventory(finalI + 1));
-//                                        }
-//                                    };
-//                                    item.itemStack = StackBuilder.start(Material.STAINED_GLASS_PANE)
-//                                            .name("&bForward Button").data((short) 3).build();
-//
-//                                }).add();
-//                            } else {
-                        gui.item().with(item -> {
-                            item.itemName = "DummyButton" + finalSlot;
-                            item.slot = finalSlot;
-                            item.action = clickEvent -> clickEvent.setCancelled(true);
-                            item.itemStack = StackBuilder.start(Material.STAINED_GLASS_PANE)
-                                    .name("&l").data((short) 15).build();
-
-                        }).add();
-                    }
-                }));
-
+                            items[ia] = new Item(itemStack, EModule.values()[ia].getModule().getName(),
+                                    action);
+                        }
+                        page.items = items;
+                    });
+        }
+        gui = builder.getGui();
+        return gui;
     }
 
     public GUI getGui() {

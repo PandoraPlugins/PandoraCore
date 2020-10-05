@@ -1,8 +1,8 @@
 package dev.minecraftplugin.pandoracore.patch;
 
+import com.azortis.azortislib.experimental.configuration.Config;
 import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.PandoraCore;
-import dev.minecraftplugin.pandoracore.configuration.Config;
 import dev.minecraftplugin.pandoracore.packethandler.PacketHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public class PatchManager {
     }
 
     public void openMenu(Player player) {
-        player.openInventory(gui.getGui().getInventory());
+        player.openInventory(gui.getGui().getPages().get(0).getView().getInventory());
     }
 
     public void disablePatch(EPatch patch) {

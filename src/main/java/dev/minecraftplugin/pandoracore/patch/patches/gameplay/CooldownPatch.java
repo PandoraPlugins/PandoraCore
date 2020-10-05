@@ -1,8 +1,8 @@
 package dev.minecraftplugin.pandoracore.patch.patches.gameplay;
 
+import com.azortis.azortislib.experimental.configuration.Config;
 import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.PandoraCore;
-import dev.minecraftplugin.pandoracore.configuration.Config;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
@@ -42,6 +42,10 @@ public class CooldownPatch extends Patch<Packet<?>> {
     public void disable(PandoraCore core) {
         config = null;
         Bukkit.getScheduler().cancelTask(updaterID);
+        pearlCooldown = null;
+        gappleCooldown = null;
+        crappleCooldown = null;
+        updaterID = 0;
     }
 
     @EventHandler
