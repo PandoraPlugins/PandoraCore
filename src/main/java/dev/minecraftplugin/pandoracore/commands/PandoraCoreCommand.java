@@ -29,7 +29,7 @@ public class PandoraCoreCommand implements ICommandExecutor, ITabCompleter {
                                 .setExecutor(new PandoraModuleCommand(core))
                                 .setName("modules")
                 ).build();
-        CommandInjector.injectCommand("core", c, true);
+        PandoraCore.injectCommand("core", c, true);
     }
 
     @Override

@@ -34,23 +34,20 @@ public class MineGUI {
     }
 
     private enum Ores {
-//        QUARTZ(new Ore("&7&oQuartz Gem")),
-//        QUARTZP(new Ore("&b&oPurified Quartz Gem")),
-//        EMERALD(new Ore("&7&oEmerald Gem")),
-//        EMERALDP(new Ore("&b&oPurified Emerald Gem")),
-//        DIAMOND(new Ore("&7&oDiamond Gem")),
-//        DIAMONDP(new Ore("&b&oPurified Diamond Gem")),
-//        REDSTONE(new Ore("&7&oRedstone Dust")),
-//        REDSTONEP(new Ore("&b&oPurified Redstone Dust")),
-//        GOLD(new Ore("&7&oGold Gem")),
-//        GOLDP(new Ore("&b&oPurified Gold Gem")),
-//        IRON(new Ore("&7&oIron Gem")),
-//        IRONP(new Ore("&b&oPurified Iron Gem")),
-//        COAL(new Ore("&7&oCoal Gem")),
-//        COALP(new Ore("&b&oPurified Coal Gem")),
-//        SPECIAL(new Ore("&7&oSpecial Gem")),
-//        SPECIALP(new Ore("&b&oSpecial Purified Gem"));
-        ;
+        QUARTZ(new Ore("&7&oQuartz Gem", 10000, 0)),
+        QUARTZP(new Ore("&b&oPurified Quartz Gem", 30000, 0)),
+        EMERALD(new Ore("&7&oEmerald Gem", 5000, 0)),
+        EMERALDP(new Ore("&b&oPurified Emerald Gem", 15000, 0)),
+        DIAMOND(new Ore("&7&oDiamond Gem", 3000, 0)),
+        DIAMONDP(new Ore("&b&oPurified Diamond Gem", 9000, 0)),
+        REDSTONE(new Ore("&7&oRedstone Dust",  500, 0)),
+        REDSTONEP(new Ore("&b&oPurified Redstone Dust", 1500, 0)),
+        GOLD(new Ore("&7&oGold Gem", 1000, 0)),
+        GOLDP(new Ore("&b&oPurified Gold Gem", 3000, 0)),
+        IRON(new Ore("&7&oIron Gem", 750, 0)),
+        IRONP(new Ore("&b&oPurified Iron Gem", 2250, 0)),
+        COAL(new Ore("&7&oCoal Gem", 100, 0)),
+        COALP(new Ore("&b&oPurified Coal Gem", 300, 0));
 
         private final Ore ore;
 

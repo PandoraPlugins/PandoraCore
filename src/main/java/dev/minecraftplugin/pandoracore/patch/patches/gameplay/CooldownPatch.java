@@ -5,16 +5,22 @@ import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class CooldownPatch extends Patch<Packet<?>> {
     private Config<CooldownPatchData> config;
@@ -51,12 +57,13 @@ public class CooldownPatch extends Patch<Packet<?>> {
     @EventHandler
     public void onPlayerEpearl(ProjectileLaunchEvent event) {
         if (event.getEntity() instanceof EnderPearl) {
-            if (pearlCooldown.containsKey(event.getEntity().getShooter())) {
+            if (pearlCooldown.containsKey((Player) event.getEntity().getShooter())) {
                 event.setCancelled(true);
+                ((Player) event.getEntity().getShooter()).getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 1));
                 ((Player) event.getEntity().getShooter()).sendMessage(
-                        FormatUtil.color(config.getConfiguration().cooldownMessage.replace("{item}", "Gapple")
+                        FormatUtil.color(config.getConfiguration().cooldownMessage.replace("{item}", "Epearl")
                                 .replace("{time}",
-                                        "" + gappleCooldown.get(event.getEntity().getShooter()))));
+                                        "" + pearlCooldown.get((Player) event.getEntity().getShooter()))));
             } else {
                 pearlCooldown.put(((Player) event.getEntity().getShooter()), config.getConfiguration().epearlCooldown);
             }
@@ -86,7 +93,7 @@ public class CooldownPatch extends Patch<Packet<?>> {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(
                             FormatUtil.color(config.getConfiguration().cooldownMessage.replace("{item}", "Crapple")
-                                    .replace("{time}", "" + gappleCooldown.get(event.getPlayer()))));
+                                    .replace("{time}", "" + crappleCooldown.get(event.getPlayer()))));
                 } else {
                     crappleCooldown.put(event.getPlayer(), config.getConfiguration().crappleCooldown);
                 }
@@ -95,9 +102,9 @@ public class CooldownPatch extends Patch<Packet<?>> {
     }
 
     public static class CooldownPatchData {
-        public int gappleCooldown = 5;
-        public int epearlCooldown = 5;
-        public int crappleCooldown = 5;
+        public int gappleCooldown = 15;
+        public int epearlCooldown = 15;
+        public int crappleCooldown = 15;
         public String cooldownMessage = "&7You are unable to use &d{item}&7 for another &5{time}&7s!";
     }
 
@@ -105,19 +112,22 @@ public class CooldownPatch extends Patch<Packet<?>> {
         @Override
         public void run() {
             for (Player player : pearlCooldown.keySet()) {
-                if (pearlCooldown.get(player) - 1 == 0) {
+                int time = pearlCooldown.get(player) - 1;
+                if (time <= 0) {
                     pearlCooldown.remove(player);
-                } else pearlCooldown.put(player, pearlCooldown.get(player) - 1);
+                } else pearlCooldown.put(player, time);
             }
             for (Player player : crappleCooldown.keySet()) {
-                if (crappleCooldown.get(player) - 1 == 0) {
+                int time = crappleCooldown.get(player) - 1;
+                if (time <= 0) {
                     crappleCooldown.remove(player);
-                } else crappleCooldown.put(player, crappleCooldown.get(player) - 1);
+                } else crappleCooldown.put(player, time);
             }
             for (Player player : gappleCooldown.keySet()) {
-                if (gappleCooldown.get(player) - 1 == 0) {
+                int time = gappleCooldown.get(player) - 1;
+                if (time <= 0) {
                     gappleCooldown.remove(player);
-                } else gappleCooldown.put(player, gappleCooldown.get(player) - 1);
+                } else gappleCooldown.put(player, time);
             }
         }
     }

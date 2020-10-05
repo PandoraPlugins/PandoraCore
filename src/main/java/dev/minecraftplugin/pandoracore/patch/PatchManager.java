@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import java.util.Arrays;
+
 public class PatchManager {
     private final Config<PatchData> patchesData;
     private final PandoraCore core;

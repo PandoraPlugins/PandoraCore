@@ -31,7 +31,7 @@ public class ModuleGUI {
                     .with(page -> {
                         page.isGlobal = true;
                         page.page = finalI;
-                        page.name = pageName + "Page: &b" + finalI;
+                        page.name = pageName + "Page: &b" + (finalI + 1);
                         Item[] items = new Item[pageSize];
                         for (int ia = 0; ia < EModule.values().length; ia++) {
                             final boolean enabled = EModule.values()[ia].getModule().isEnabled();
@@ -48,18 +48,18 @@ public class ModuleGUI {
                             final BiConsumer<InventoryClickEvent, View> action = (clickEvent, view) -> {
                                 clickEvent.setCancelled(true);
                                 if (EModule.values()[finalIa].getModule().isEnabled()) {
-                                    EModule.values()[finalIa].getModule().disable(PandoraCore.getInstance());
+                                    PandoraCore.getInstance().getModuleManager().disableModule(EModule.values()[finalIa]);
                                 } else {
-                                    EModule.values()[finalIa].getModule().enable(PandoraCore.getInstance());
+                                    PandoraCore.getInstance().getModuleManager().enableModule(EModule.values()[finalIa]);
                                 }
                                 ItemStack newStack = ItemBuilder.start(Material.STAINED_GLASS_PANE)
-                                        .data(enabled ? (short) 5 : (short) 14)
-                                        .name((enabled ? "&a" : "&c") + EModule.values()[finalIa].getModule().getName())
-                                        .lore(enabled ? "&a&oENABLED" : "&c&oDISABLED",
+                                        .data(EModule.values()[finalIa].getModule().isEnabled() ? (short) 5 : (short) 14)
+                                        .name((EModule.values()[finalIa].getModule().isEnabled() ? "&a" : "&c") + EModule.values()[finalIa].getModule().getName())
+                                        .lore(EModule.values()[finalIa].getModule().isEnabled() ? "&a&oENABLED" : "&c&oDISABLED",
                                                 "&b&o" + EModule.values()[finalIa].getModule().getDescription()
                                                 , "&b&oRequires: " +
                                                         Arrays.toString(EModule.values()[finalIa].getModule().getDependencies()),
-                                                (enabled ? "&b&nClick me to &c&nDISABLE&b&n this patch!"
+                                                (EModule.values()[finalIa].getModule().isEnabled() ? "&b&nClick me to &c&nDISABLE&b&n this patch!"
                                                         : "&b&nClick me to &a&nENABLE&b&n this patch!"))
                                         .build();
                                 view.getInventory().setItem(clickEvent.getSlot(), newStack);

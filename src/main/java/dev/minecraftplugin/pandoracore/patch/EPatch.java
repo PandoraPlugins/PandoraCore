@@ -12,7 +12,7 @@ public enum EPatch {
     SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),
     REMOVEDEATH(new RemoveDeathScreenPatch()),
     XPBARPATCH(new XPBarPatch()),
-    NOQUILL(new NoCraftQuillPatch()),
+    NOQUILL(new DenyItemPatch()),
     COOLDOWN(new CooldownPatch());
 
     private final Patch<?> patch;
