@@ -24,97 +24,90 @@ public class AmountGUI {
         BiConsumer<InventoryCloseEvent, View> action = (event, view) ->
                 module.getMineGUI().sellItems(((AmountView) view).getAmount(), ((AmountView) view).ore,
                         (Player) event.getPlayer());
-        AmountPage p = new AmountPage(builder.getGui(), 1, "MineShop", false, 45, action);
-        builder.addPage(45).with(page -> {
-            page.isGlobal = false;
-            page.name = "MineShop";
-            page.page = 1;
-            ItemStack addSingle = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 1")
-                    .data((short) 5).build();
-            ItemStack addTen = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 10")
-                    .data((short) 5).build();
-            ItemStack addStack = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 64")
-                    .data((short) 5).build();
-            ItemStack filler = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("")
-                    .data((short) 15).build();
-            ItemStack removeSingle = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 1")
-                    .data((short) 14).build();
-            ItemStack removeTen = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 10")
-                    .data((short) 14).build();
-            ItemStack removeStack = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 64")
-                    .data((short) 14).build();
-            ItemStack ore = ItemBuilder.start(Material.BEDROCK).build();
-            for (int i = 0; i < 45; i += 9) {
-                page.items[i] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
-                page.items[i + 1] = new Item(addStack, "addStack", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    ((AmountView) view).setAmount(((AmountView) view).getAmount() + 64);
-                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                    view.getInventory().setItem(22, stack);
-                });
-                page.items[i + 2] = new Item(addTen, "addTen", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    ((AmountView) view).setAmount(((AmountView) view).getAmount() + 10);
-                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                    view.getInventory().setItem(22, stack);
-                });
-                page.items[i + 3] = new Item(addSingle, "addSingle", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    ((AmountView) view).setAmount(((AmountView) view).getAmount() + 1);
-                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                    view.getInventory().setItem(22, stack);
-                });
-                page.items[i + 4] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
-                page.items[i + 5] = new Item(removeSingle, "removeSingle", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    if (((AmountView) view).getAmount() > 1) {
-
-                        ((AmountView) view).setAmount(((AmountView) view).getAmount() - 1);
-                        ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                                ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                        view.getInventory().setItem(22, stack);
-                    }
-                });
-                page.items[i + 5] = new Item(removeTen, "removeTen", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    if (((AmountView) view).getAmount() > 10) {
-
-                        ((AmountView) view).setAmount(((AmountView) view).getAmount() - 10);
-                        ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                                ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                        view.getInventory().setItem(22, stack);
-                    }
-                });
-                page.items[i + 7] = new Item(removeStack, "removeStack", (clickEvent, view) -> {
-                    clickEvent.setCancelled(true);
-                    if (((AmountView) view).getAmount() > 64) {
-                        ((AmountView) view).setAmount(((AmountView) view).getAmount() - 64);
-                        ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
-                                ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
-                        view.getInventory().setItem(22, stack);
-                    }
-                });
-                page.items[i + 8] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
-            }
-            page.items[22] = new Item(ore, "oreItem", (clickEvent, view) -> {
+        AmountPage page = new AmountPage(builder.getGui(), 1, "MineShop", false, 45, action);
+        ItemStack addSingle = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 1")
+                .data((short) 5).build();
+        ItemStack addTen = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 10")
+                .data((short) 5).build();
+        ItemStack addStack = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&aAdd 64")
+                .data((short) 5).build();
+        ItemStack filler = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("")
+                .data((short) 15).build();
+        ItemStack removeSingle = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 1")
+                .data((short) 14).build();
+        ItemStack removeTen = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 10")
+                .data((short) 14).build();
+        ItemStack removeStack = ItemBuilder.start(Material.STAINED_GLASS_PANE).name("&cRemove 64")
+                .data((short) 14).build();
+        ItemStack ore = ItemBuilder.start(Material.BEDROCK).build();
+        for (int i = 0; i < 45; i += 9) {
+            items[i] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
+            items[i + 1] = new Item(addStack, "addStack", (clickEvent, view) -> {
                 clickEvent.setCancelled(true);
-                module.getMineGUI().sellItems(((AmountView) view).getAmount(), ((AmountView) view).ore,
-                        (Player) clickEvent.getWhoClicked());
-                clickEvent.getWhoClicked().openInventory(module.getMineGUI().getGui().getPages().get(0).getView().getInventory());
+                ((AmountView) view).setAmount(((AmountView) view).getAmount() + 64);
+                ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                        ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                view.getInventory().setItem(22, stack);
             });
+            items[i + 2] = new Item(addTen, "addTen", (clickEvent, view) -> {
+                clickEvent.setCancelled(true);
+                ((AmountView) view).setAmount(((AmountView) view).getAmount() + 10);
+                ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                        ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                view.getInventory().setItem(22, stack);
+            });
+            items[i + 3] = new Item(addSingle, "addSingle", (clickEvent, view) -> {
+                clickEvent.setCancelled(true);
+                ((AmountView) view).setAmount(((AmountView) view).getAmount() + 1);
+                ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                        ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                view.getInventory().setItem(22, stack);
+            });
+            items[i + 4] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
+            items[i + 5] = new Item(removeSingle, "removeSingle", (clickEvent, view) -> {
+                clickEvent.setCancelled(true);
+                if (((AmountView) view).getAmount() > 1) {
+
+                    ((AmountView) view).setAmount(((AmountView) view).getAmount() - 1);
+                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                    view.getInventory().setItem(22, stack);
+                }
+            });
+            items[i + 6] = new Item(removeTen, "removeTen", (clickEvent, view) -> {
+                clickEvent.setCancelled(true);
+                if (((AmountView) view).getAmount() > 10) {
+
+                    ((AmountView) view).setAmount(((AmountView) view).getAmount() - 10);
+                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                    view.getInventory().setItem(22, stack);
+                }
+            });
+            items[i + 7] = new Item(removeStack, "removeStack", (clickEvent, view) -> {
+                clickEvent.setCancelled(true);
+                if (((AmountView) view).getAmount() > 64) {
+                    ((AmountView) view).setAmount(((AmountView) view).getAmount() - 64);
+                    ItemStack stack = ItemBuilder.start(view.getInventory().getItem(22)).lore("&7Sell &bx" +
+                            ((AmountView) view).getAmount()).amount(Math.min(((AmountView) view).getAmount(), 64)).build();
+                    view.getInventory().setItem(22, stack);
+                }
+            });
+            items[i + 8] = new Item(filler, "dummy", (clickEvent, view) -> clickEvent.setCancelled(true));
+        }
+        items[22] = new Item(ore, "oreItem", (clickEvent, view) -> {
+            clickEvent.setCancelled(true);
+            clickEvent.getWhoClicked().openInventory(module.getMineGUI().getGui().getPages().get(0).getView().getInventory());
         });
 
-        p.setItems(items);
-        builder.getGui().getPages().add(p);
+        page.setItems(items);
+        builder.getGui().getPages().add(page);
         amountGUI = builder.getGui();
     }
 
     public View getAmountGUI(final MineGUI.Ore ore) {
         View v = ((AmountPage) amountGUI.getPages().get(0)).getView(ore);
-        ItemStack stack = ItemBuilder.start(ore.material).name(ore.name).build();
+        ItemStack stack = ItemBuilder.start(ore.material).name(ore.name).lore("&7Sell &bx1").build();
         v.getInventory().setItem(22, stack);
         return v;
     }

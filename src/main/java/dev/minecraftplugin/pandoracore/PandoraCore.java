@@ -3,7 +3,6 @@ package dev.minecraftplugin.pandoracore;
 import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.experimental.configuration.ConfigManager;
 import com.azortis.azortislib.experimental.inventory.GUIManager;
-import com.azortis.azortislib.reflection.Reflections;
 import dev.minecraftplugin.pandoracore.commands.PandoraCoreCommand;
 import dev.minecraftplugin.pandoracore.module.ModuleManager;
 import dev.minecraftplugin.pandoracore.packethandler.PacketChannelListener;
@@ -57,6 +56,7 @@ public final class PandoraCore extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         patchManager.disable();
+        moduleManager.disable();
     }
 
 
@@ -73,8 +73,7 @@ public final class PandoraCore extends JavaPlugin {
                 if (!conflictCommand.getAliases().isEmpty())
                     conflictCommandAliases.addAll(conflictCommand.getAliases());
                 Map<String, org.bukkit.command.Command> knownCommands;
-                Field knownCommandsField = null;
-                knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
+                Field knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
                 knownCommandsField.setAccessible(true);
                 knownCommands = (Map<String, org.bukkit.command.Command>) knownCommandsField.get(commandMap);
                 knownCommands.remove(conflictCommand.getName());
@@ -87,6 +86,27 @@ public final class PandoraCore extends JavaPlugin {
 
             }
             commandMap.register(fallBackPrefix, command.getBukkitCommand());
+            commandMapField.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void removeCommand(String command) {
+        try {
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            SimpleCommandMap commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer());
+
+            Map<String, org.bukkit.command.Command> knownCommands;
+            Field knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
+            knownCommandsField.setAccessible(true);
+            knownCommands = (Map<String, org.bukkit.command.Command>) knownCommandsField.get(commandMap);
+
+            knownCommands.remove(command);
+            knownCommandsField.setAccessible(false);
+
             commandMapField.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             ex.printStackTrace();

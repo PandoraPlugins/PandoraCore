@@ -19,7 +19,7 @@ public class ShopCommand implements ICommandExecutor {
                 .setDescription("Command to sell ores.")
                 .setExecutor(this)
                 .build();
-        CommandInjector.injectCommand("shop", c, true);
+        PandoraCore.injectCommand("shop", c, true);
         this.module = module;
     }
 

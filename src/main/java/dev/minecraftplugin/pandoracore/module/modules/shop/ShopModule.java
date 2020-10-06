@@ -1,6 +1,5 @@
 package dev.minecraftplugin.pandoracore.module.modules.shop;
 
-import com.azortis.azortislib.command.CommandInjector;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.module.Module;
 import dev.minecraftplugin.pandoracore.module.modules.shop.shop.AmountGUI;
@@ -39,14 +38,15 @@ public class ShopModule extends Module<Packet<?>> {
             disable(core);
             return;
         }
+        amountGUI = new AmountGUI(this);
+        mineGUI = new MineGUI(this);
         new ShopCommand(core, this);
-        new AmountGUI(this);
-        new MineGUI(this);
+
     }
 
     @Override
     public void disable(PandoraCore core) {
-        CommandInjector.removeCommand("mineshop");
+        PandoraCore.removeCommand("mineshop");
         mineGUI = null;
         amountGUI = null;
     }

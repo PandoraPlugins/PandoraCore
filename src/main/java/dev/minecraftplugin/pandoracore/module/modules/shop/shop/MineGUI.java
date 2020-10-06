@@ -40,12 +40,13 @@ public class MineGUI {
                     for (int i = 0; i < Ores.values().length; i++) {
                         final Ore ore = Ores.values()[i].getOre();
                         ItemStack stack = ItemBuilder.start(ore.material).name(ore.name)
-                                .lore("&7Buy Price: &cN/A", "&7Sell Price &a$" + ore.sellPrice, "&1Click with MMB to sell all!")
+                                .lore("&7Buy Price: &cN/A", "&7Sell Price &a$" + ore.sellPrice, "&9Click with MMB to sell all!")
                                 .build();
                         Item item = new Item(stack, ore.name, ((clickEvent, view) -> {
                             clickEvent.setCancelled(true);
                             if (clickEvent.getClick() == ClickType.MIDDLE) {
                                 sellItems(-1, ore, (Player) clickEvent.getWhoClicked());
+                                return;
                             }
                             clickEvent.getWhoClicked().openInventory(amountGUI.getAmountGUI(ore).getInventory());
                         }));
@@ -81,8 +82,10 @@ public class MineGUI {
                     }
                 }
             }
-            economy.depositPlayer(player, sum);
-            player.sendMessage(FormatUtil.color("&7You have sold &bx" + amount + " " + ore.name + " for &a$" + sum));
+            if (amount > 0) {
+                economy.depositPlayer(player, sum);
+                player.sendMessage(FormatUtil.color("&7You have sold &bx" + amount + " " + ore.name + " for &a$" + sum));
+            }
             return;
         }
         // We are selling only the
@@ -115,25 +118,27 @@ public class MineGUI {
                 }
             }
         }
-        economy.depositPlayer(player, sum);
-        player.sendMessage(FormatUtil.color("&7You have sold &bx" + amount + " " + ore.name + " for &a$" + sum));
+        if (amount > 0) {
+            economy.depositPlayer(player, sum);
+            player.sendMessage(FormatUtil.color("&7You have sold &bx" + amount + " " + ore.name + " for &a$" + sum));
+        }
     }
 
     private enum Ores {
-        QUARTZ(new Ore("&oQuartz Gem", 10000, 10, Material.QUARTZ)),
-        QUARTZP(new Ore("&b&oPurified Quartz Gem", 30000, 11, Material.QUARTZ)),
-        EMERALD(new Ore("&oEmerald Gem", 5000, 12, Material.EMERALD)),
-        EMERALDP(new Ore("&b&oPurified Emerald Gem", 15000, 13, Material.EMERALD)),
-        DIAMOND(new Ore("&oDiamond Gem", 3000, 14, Material.DIAMOND)),
-        DIAMONDP(new Ore("&b&oPurified Diamond Gem", 9000, 15, Material.DIAMOND)),
-        REDSTONE(new Ore("&oRedstone Dust", 500, 16, Material.REDSTONE)),
-        REDSTONEP(new Ore("&b&oPurified Redstone Dust", 1500, 19, Material.REDSTONE)),
-        GOLD(new Ore("&oGold Gem", 1000, 20, Material.GOLD_INGOT)),
-        GOLDP(new Ore("&b&oPurified Gold Gem", 3000, 21, Material.GOLD_INGOT)),
-        IRON(new Ore("&oIron Gem", 750, 22, Material.IRON_INGOT)),
-        IRONP(new Ore("&b&oPurified Iron Gem", 2250, 23, Material.IRON_INGOT)),
-        COAL(new Ore("&oCoal Gem", 100, 24, Material.COAL)),
-        COALP(new Ore("&b&oPurified Coal Gem", 300, 25, Material.COAL));
+        QUARTZ(new Ore("Quartz Gem", 10000, 10, Material.QUARTZ)),
+        QUARTZP(new Ore("Purified Quartz Gem", 30000, 11, Material.QUARTZ)),
+        EMERALD(new Ore("Emerald Gem", 5000, 12, Material.EMERALD)),
+        EMERALDP(new Ore("Purified Emerald Gem", 15000, 13, Material.EMERALD)),
+        DIAMOND(new Ore("Diamond Gem", 3000, 14, Material.DIAMOND)),
+        DIAMONDP(new Ore("Purified Diamond Gem", 9000, 15, Material.DIAMOND)),
+        REDSTONE(new Ore("Redstone Dust", 500, 16, Material.REDSTONE)),
+        REDSTONEP(new Ore("Purified Redstone Dust", 1500, 19, Material.REDSTONE)),
+        GOLD(new Ore("Gold Gem", 1000, 20, Material.GOLD_INGOT)),
+        GOLDP(new Ore("Purified Gold Gem", 3000, 21, Material.GOLD_INGOT)),
+        IRON(new Ore("Iron Gem", 750, 22, Material.IRON_INGOT)),
+        IRONP(new Ore("Purified Iron Gem", 2250, 23, Material.IRON_INGOT)),
+        COAL(new Ore("Coal Gem", 100, 24, Material.COAL)),
+        COALP(new Ore("Purified Coal Gem", 300, 25, Material.COAL));
 
         private final Ore ore;
 
