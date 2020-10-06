@@ -5,9 +5,7 @@ import com.azortis.azortislib.command.CommandInjector;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import dev.minecraftplugin.pandoracore.PandoraCore;
-import dev.minecraftplugin.pandoracore.module.EModule;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CombatLeaveCommand implements ICommandExecutor {
     public CombatLeaveCommand(PandoraCore core, String commandName) {

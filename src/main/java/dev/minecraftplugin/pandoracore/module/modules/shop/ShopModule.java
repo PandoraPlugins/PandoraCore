@@ -3,7 +3,7 @@ package dev.minecraftplugin.pandoracore.module.modules.shop;
 import com.azortis.azortislib.command.CommandInjector;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.module.Module;
-import dev.minecraftplugin.pandoracore.module.modules.shop.amount.AmountGUI;
+import dev.minecraftplugin.pandoracore.module.modules.shop.shop.AmountGUI;
 import dev.minecraftplugin.pandoracore.module.modules.shop.shop.MineGUI;
 import net.milkbowl.vault.economy.Economy;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -40,7 +40,7 @@ public class ShopModule extends Module<Packet<?>> {
             return;
         }
         new ShopCommand(core, this);
-        new AmountGUI();
+        new AmountGUI(this);
         new MineGUI(this);
     }
 

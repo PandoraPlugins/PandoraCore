@@ -20,7 +20,7 @@ public class InvisibilityHitPatch extends Patch<Packet<?>> {
 
     @Override
     public void enable(PandoraCore core) {
-
+        // todo: this is broken, make sure it works.
     }
 
     @EventHandler
