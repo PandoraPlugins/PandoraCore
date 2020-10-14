@@ -1,10 +1,11 @@
 package dev.minecraftplugin.pandoracore.module;
 
 import dev.minecraftplugin.pandoracore.module.modules.shop.ShopModule;
-import dev.minecraftplugin.pandoracore.patch.EPatch;
+import dev.minecraftplugin.pandoracore.module.modules.tags.TagModule;
 
 public enum EModule {
-    MINESHOP(new ShopModule());
+    MINESHOP(new ShopModule()),
+    TAGS(new TagModule());
     //COMBATLOG(new CombatLogModule());
     ;
     private final Module<?> module;
