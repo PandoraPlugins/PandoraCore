@@ -11,6 +11,7 @@ public enum EPatch {
     REMOVEDEATH(new RemoveDeathScreenPatch()),
     XPBARPATCH(new XPBarPatch()),
     NOQUILL(new DenyItemPatch()),
+    RENAME(new RenameItemPatch()),
     COOLDOWN(new CooldownPatch());
 
     private final Patch<?> patch;
