@@ -4,10 +4,18 @@ import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.configuration.Config;
+import com.earth2me.essentials.User;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
+import net.ess3.api.Economy;
 import net.minecraft.server.v1_8_R3.Packet;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.math.BigDecimal;
 
 public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecutor {
     private PandoraCore plugin;
@@ -21,14 +29,52 @@ public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecuto
     public RenameItemPatch() {
 
         super("RenameItemPatch", "Rename items for a price!", false, false,
-                null, false);
+                null, false, "Essentials");
 
 
     }
 
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
+
+        if(command.getName().equalsIgnoreCase("rename")){
+
+            if(sender instanceof Player){
+
+                Player player = ((Player) sender);
+
+                if(player.getInventory().getItemInHand() != null){
+                     ItemStack item = player.getInventory().getItemInHand();
+
+                     ItemMeta meta = item.getItemMeta();
+                     String name = ChatColor.translateAlternateColorCodes('&', String.join(" ", strings));
+                     meta.setDisplayName(name);
+
+                    BigDecimal cash = Economy.getMoneyExact(((User) player));
+                    if(cash.intValue() < config.getConfiguration().cost){
+                        ((User) player).sendMessage(ChatColor.RED+"Insufficient amount to pay. Need at least $"+ config.getConfiguration().cost+" to use this command");
+                        return true;
+                    }
+
+                    item.setItemMeta(meta);
+
+                    ((User) player).takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
+                    player.sendMessage(ChatColor.GREEN+"Renamed your current item!");
+
+                    return true;
+
+                }else{
+                    player.sendMessage(ChatColor.RED+"You are currently not holding anything to rename");
+                }
+
+            }else {
+                sender.sendMessage(ChatColor.RED+"Only players may use this command");
+                return true;
+            }
+
+        }
+
         return false;
     }
 
