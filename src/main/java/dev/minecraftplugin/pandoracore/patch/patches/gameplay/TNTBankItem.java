@@ -7,8 +7,6 @@ import com.azortis.azortislib.configuration.Config;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import dev.minecraftplugin.pandoracore.PandoraCore;
-import dev.minecraftplugin.pandoracore.module.modules.PandoraTools.ItemData;
-import dev.minecraftplugin.pandoracore.module.modules.PandoraTools.PandoraToolsCommand;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -17,7 +15,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +25,9 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
