@@ -16,7 +16,7 @@ public class CombatLeaveCommand implements ICommandExecutor {
                 .setPlugin(core)
                 .setUsage("/" + commandName)
                 .build();
-        CommandInjector.injectCommand("combatlog", c, true);
+        PandoraCore.injectCommand("combatlog", c, true);
     }
 
     @Override

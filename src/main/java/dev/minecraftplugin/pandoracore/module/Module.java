@@ -1,6 +1,6 @@
 package dev.minecraftplugin.pandoracore.module;
 
-import com.azortis.azortislib.experimental.configuration.Config;
+import com.azortis.azortislib.configuration.Config;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.packethandler.PacketListener;
 import net.minecraft.server.v1_8_R3.Packet;

@@ -1,7 +1,7 @@
 package dev.minecraftplugin.pandoracore.module.modules.combatlog;
 
 import com.azortis.azortislib.command.CommandInjector;
-import com.azortis.azortislib.experimental.configuration.Config;
+import com.azortis.azortislib.configuration.Config;
 import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.module.Module;
@@ -34,9 +34,6 @@ public class CombatLogModule extends Module<Packet<?>> {
                 null, true);
     }
 
-    public Config<CombatLogModuleData> getConfig() {
-        return config;
-    }
 
     public Map<Player, Integer> getSecondsLeft() {
         return secondsLeft;

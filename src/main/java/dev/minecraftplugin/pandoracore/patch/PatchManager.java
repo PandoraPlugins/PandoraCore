@@ -1,6 +1,6 @@
 package dev.minecraftplugin.pandoracore.patch;
 
-import com.azortis.azortislib.experimental.configuration.Config;
+import com.azortis.azortislib.configuration.Config;
 import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.packethandler.PacketHandler;
@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-import java.util.Arrays;
 
 public class PatchManager {
     private final Config<PatchData> patchesData;

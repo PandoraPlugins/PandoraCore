@@ -1,9 +1,9 @@
 package dev.minecraftplugin.pandoracore.module.modules.shop.shop;
 
-import com.azortis.azortislib.experimental.inventory.GUI;
-import com.azortis.azortislib.experimental.inventory.GUIBuilder;
-import com.azortis.azortislib.experimental.inventory.item.Item;
-import com.azortis.azortislib.experimental.inventory.item.ItemBuilder;
+import com.azortis.azortislib.inventory.GUI;
+import com.azortis.azortislib.inventory.GUIBuilder;
+import com.azortis.azortislib.inventory.item.Item;
+import com.azortis.azortislib.inventory.item.ItemBuilder;
 import com.azortis.azortislib.utils.FormatUtil;
 import dev.minecraftplugin.pandoracore.module.modules.shop.ShopModule;
 import net.milkbowl.vault.economy.Economy;

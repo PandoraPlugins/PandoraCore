@@ -5,8 +5,6 @@ import dev.minecraftplugin.pandoracore.patch.patches.gameplay.*;
 
 public enum EPatch {
     INVIS(new InvisibilityHitPatch()),
-    CREATIVEITEM(new CreativeItemPatch()),
-    INVALIDSIGN(new InvalidSignsPatch()),
     NULLADDRESS(new NullAddressPatch()),
     UUIDSPOOFPATCH(new UUIDSpoofPatch()),
     SNOWBALLLIMITERPATCH(new ProjectileLimiterPatch()),

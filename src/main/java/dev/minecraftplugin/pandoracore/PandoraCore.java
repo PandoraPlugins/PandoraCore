@@ -1,8 +1,8 @@
 package dev.minecraftplugin.pandoracore;
 
 import com.azortis.azortislib.command.Command;
-import com.azortis.azortislib.experimental.configuration.ConfigManager;
-import com.azortis.azortislib.experimental.inventory.GUIManager;
+import com.azortis.azortislib.configuration.ConfigManager;
+import com.azortis.azortislib.inventory.GUIManager;
 import dev.minecraftplugin.pandoracore.commands.PandoraCoreCommand;
 import dev.minecraftplugin.pandoracore.module.ModuleManager;
 import dev.minecraftplugin.pandoracore.packethandler.PacketChannelListener;

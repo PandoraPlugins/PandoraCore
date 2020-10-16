@@ -1,10 +1,11 @@
 package dev.minecraftplugin.pandoracore.module;
 
-import com.azortis.azortislib.experimental.inventory.GUI;
-import com.azortis.azortislib.experimental.inventory.GUIBuilder;
-import com.azortis.azortislib.experimental.inventory.View;
-import com.azortis.azortislib.experimental.inventory.item.Item;
-import com.azortis.azortislib.experimental.inventory.item.ItemBuilder;
+
+import com.azortis.azortislib.inventory.GUI;
+import com.azortis.azortislib.inventory.GUIBuilder;
+import com.azortis.azortislib.inventory.View;
+import com.azortis.azortislib.inventory.item.Item;
+import com.azortis.azortislib.inventory.item.ItemBuilder;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
