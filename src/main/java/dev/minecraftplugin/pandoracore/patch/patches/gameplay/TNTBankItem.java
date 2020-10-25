@@ -43,7 +43,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
     public TNTBankItem() {
 
-        super("PandoraTNTBankAdd", "Add to your faction bank by right clicking a chest!", false, false, null, true, "Factions");
+        super("TNTBankItem", "Add to your faction bank by right clicking a chest!", false, false, null, true, "Factions");
 
     }
 
@@ -178,7 +178,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
         Command c = new CommandBuilder()
                 .setExecutor(this)
-                .setDescription("Safely quit the server.")
+                .setDescription("Add tnt to your faction bank")
                 .setName("tntwand")
                 .setPlugin(core)
                 .setUsage("/tntwand <player>")
