@@ -12,7 +12,8 @@ public enum EPatch {
     XPBARPATCH(new XPBarPatch()),
     NOQUILL(new DenyItemPatch()),
     RENAME(new RenameItemPatch()),
-    COOLDOWN(new CooldownPatch());
+    COOLDOWN(new CooldownPatch()),
+    TNTBANK(new TNTBankItem());
 
     private final Patch<?> patch;
 
