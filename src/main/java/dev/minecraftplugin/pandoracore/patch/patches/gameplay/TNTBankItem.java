@@ -179,19 +179,19 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
         Command c = new CommandBuilder()
                 .setExecutor(this)
                 .setDescription("Safely quit the server.")
-                .setName("ftools")
+                .setName("tntwand")
                 .setPlugin(core)
-                .setUsage("/tntWand <player>")
+                .setUsage("/tntwand <player>")
                 .setPermission("pandora.ftools.give")
                 .build();
-        PandoraCore.injectCommand("ftools", c, true);
+        PandoraCore.injectCommand("tntwand", c, true);
         config = core.getConfigManager().loadConfig("/patches/TNTBankItem/items.json", new TNTBankItemData());
 
     }
 
     @Override
     public void disable(PandoraCore core) {
-        PandoraCore.removeCommand("ftools");
+        PandoraCore.removeCommand("tntwand");
         plugin = null;
 
     }
