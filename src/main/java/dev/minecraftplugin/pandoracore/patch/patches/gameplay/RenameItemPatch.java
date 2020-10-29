@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -61,44 +62,61 @@ public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecuto
 
         if(usersLooking.containsKey(event.getWhoClicked().getUniqueId())){
 
+            if(event.getClick().toString().toLowerCase().contains("shift")){
+                event.setCancelled(true);
+                return;
+            }
             Player player = ((Player) event.getWhoClicked());
 
             ItemStack item = event.getCurrentItem();
-            if (TNTBankItem.containsNBT(item, "shop")) {
+
+            if(item != null) {
                 String itemName = item.getItemMeta().getDisplayName();
 
-                if(itemName.toLowerCase().contains("confirm")){
+                if (itemName.toLowerCase().contains("confirm")) {
 
                     User user = Essentials.getPlugin(Essentials.class).getUser(player.getUniqueId());
 
-                    if (user.canAfford(BigDecimal.valueOf(config.getConfiguration().cost))) {
+                    if (!user.canAfford(BigDecimal.valueOf(config.getConfiguration().cost))) {
+
                         player.sendMessage(ChatColor.RED + "Insufficient amount to pay. Need at least $" + config.getConfiguration().cost + " to use this command");
-                        player.closeInventory();
                         usersLooking.remove(player.getUniqueId());
+                        player.closeInventory();
+                        event.setCancelled(true);
 
                         return;
                     }
 
                     user.takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
+
+                    ItemStack beingSold = player.getOpenInventory().getTopInventory().getItem(4);
+                    player.setItemInHand(beingSold);
+                    usersLooking.remove(player.getUniqueId());
+
                     player.closeInventory();
 
                     player.sendMessage(ChatColor.GREEN + "Renamed your current item!");
 
 
+                } else if (itemName.toLowerCase().contains("cancel")) {
 
-                }else if(itemName.toLowerCase().contains("cancel")){
+                    usersLooking.remove(player.getUniqueId());
 
                     player.closeInventory();
-                    player.sendMessage(ChatColor.GOLD+"Cancelled the rename request");
+                    player.sendMessage(ChatColor.GOLD + "Cancelled the rename request");
 
                 }
-
             }
 
-            usersLooking.remove(player.getUniqueId());
             event.setCancelled(true);
 
         }
+
+    }
+    @EventHandler
+    public void onDrag(InventoryDragEvent event){
+
+        event.setCancelled(usersLooking.containsKey(event.getWhoClicked().getUniqueId()));
 
     }
 
@@ -120,7 +138,7 @@ public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecuto
         confimInv.setItem(4, item);
 
         for(int i = 0; i < confimInv.getSize(); i++)
-            if(confimInv.getItem(i) != null)
+            if(confimInv.getItem(i) == null)
                 confimInv.setItem(i, border);
 
         return confimInv;
