@@ -4,6 +4,7 @@ import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.configuration.Config;
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
@@ -44,34 +45,36 @@ public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecuto
 
                 Player player = ((Player) sender);
 
-                if(player.getInventory().getItemInHand() != null){
-                     ItemStack item = player.getInventory().getItemInHand();
+                if(strings.length > 0) {
 
-                     ItemMeta meta = item.getItemMeta();
-                     String name = ChatColor.translateAlternateColorCodes('&', String.join(" ", strings));
-                     meta.setDisplayName(name);
+                    if (player.getInventory().getItemInHand() != null) {
+                        ItemStack item = player.getInventory().getItemInHand();
 
-                    BigDecimal cash = Economy.getMoneyExact(((User) player));
-                    if(cash.intValue() < config.getConfiguration().cost){
-                        ((User) player).sendMessage(ChatColor.RED+"Insufficient amount to pay. Need at least $"+ config.getConfiguration().cost+" to use this command");
-                        return true;
+                        ItemMeta meta = item.getItemMeta();
+                        String name = ChatColor.translateAlternateColorCodes('&', String.join(" ", strings));
+                        meta.setDisplayName(name);
+
+                        BigDecimal cash = Economy.getMoneyExact(Essentials.getPlugin(Essentials.class).getUser(player.getUniqueId()));
+                        if (cash.intValue() < config.getConfiguration().cost) {
+                            ((User) player).sendMessage(ChatColor.RED + "Insufficient amount to pay. Need at least $" + config.getConfiguration().cost + " to use this command");
+                            return true;
+                        }
+
+                        item.setItemMeta(meta);
+
+                        ((User) player).takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
+                        player.sendMessage(ChatColor.GREEN + "Renamed your current item!");
+
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You are currently not holding anything to rename");
                     }
-
-                    item.setItemMeta(meta);
-
-                    ((User) player).takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
-                    player.sendMessage(ChatColor.GREEN+"Renamed your current item!");
-
-                    return true;
-
                 }else{
-                    player.sendMessage(ChatColor.RED+"You are currently not holding anything to rename");
+                    player.sendMessage(ChatColor.RED+"Please specify what to rename this item to");
                 }
-
             }else {
                 sender.sendMessage(ChatColor.RED+"Only players may use this command");
-                return true;
             }
+            return true;
 
         }
 
