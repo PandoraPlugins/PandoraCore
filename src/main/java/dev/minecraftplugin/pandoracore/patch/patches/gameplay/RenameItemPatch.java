@@ -54,15 +54,16 @@ public class RenameItemPatch extends Patch<Packet<?>> implements ICommandExecuto
                         String name = ChatColor.translateAlternateColorCodes('&', String.join(" ", strings));
                         meta.setDisplayName(name);
 
-                        BigDecimal cash = Economy.getMoneyExact(Essentials.getPlugin(Essentials.class).getUser(player.getUniqueId()));
-                        if (cash.intValue() < config.getConfiguration().cost) {
-                            ((User) player).sendMessage(ChatColor.RED + "Insufficient amount to pay. Need at least $" + config.getConfiguration().cost + " to use this command");
+                        User user = Essentials.getPlugin(Essentials.class).getUser(player.getUniqueId());
+
+                        if (user.canAfford(BigDecimal.valueOf(config.getConfiguration().cost))) {
+                            player.sendMessage(ChatColor.RED + "Insufficient amount to pay. Need at least $" + config.getConfiguration().cost + " to use this command");
                             return true;
                         }
 
                         item.setItemMeta(meta);
 
-                        ((User) player).takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
+                        user.takeMoney(BigDecimal.valueOf(config.getConfiguration().cost));
                         player.sendMessage(ChatColor.GREEN + "Renamed your current item!");
 
                     } else {

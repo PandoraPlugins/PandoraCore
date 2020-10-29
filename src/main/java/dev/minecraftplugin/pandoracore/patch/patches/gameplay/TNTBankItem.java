@@ -4,8 +4,7 @@ import com.azortis.azortislib.command.Command;
 import com.azortis.azortislib.command.builders.CommandBuilder;
 import com.azortis.azortislib.command.executors.ICommandExecutor;
 import com.azortis.azortislib.configuration.Config;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.*;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
@@ -13,6 +12,7 @@ import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -57,49 +57,55 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
                 ItemStack item = event.getPlayer().getItemInHand();
 
-                if(containsNBT(item, "PandoraTNTBankItem")){
+                if(containsNBT(item, "PandoraTNTBankItem")) {
 
-                    if(event.getClickedBlock().getState() instanceof InventoryHolder){
+                    if (event.getClickedBlock().getState() instanceof InventoryHolder) {
+                        FPlayer p = FPlayers.getInstance().getByPlayer(event.getPlayer());
 
-                        FPlayer p = ((FPlayer) event.getPlayer());
+                        if (p.getFaction() != null) {
 
-                        if(p.getFaction() != null) {
+                            Block clicked = event.getClickedBlock();
+                            Faction f = Board.getInstance().getFactionAt(new FLocation(clicked.getLocation()));
 
-                            InventoryHolder itemInvHolder = ((InventoryHolder) event.getClickedBlock().getState());
+                                if (f != null && f.getFPlayers().contains(p)) {
 
-                            Inventory itemInv = itemInvHolder.getInventory();
+                                InventoryHolder itemInvHolder = ((InventoryHolder) event.getClickedBlock().getState());
 
-                            List<ItemStack> collect = Arrays.stream(itemInv.getContents()).filter(i -> i.getType() == Material.TNT).collect(Collectors.toList());
+                                Inventory itemInv = itemInvHolder.getInventory();
 
-                            Faction f = p.getFaction();
-                            int addedAmt = 0;
-                            for (ItemStack itemStack : collect) {
+                                List<ItemStack> collect = Arrays.stream(itemInv.getContents()).filter(i -> i.getType() == Material.TNT).collect(Collectors.toList());
 
-                                if(f.getTntBankLimit() > f.getTnt()){
+                                Faction fac = p.getFaction();
+                                int addedAmt = 0;
+                                for (ItemStack itemStack : collect) {
 
-                                    f.addTnt(itemStack.getAmount());
-                                    addedAmt += itemStack.getAmount();
+                                    if (f.getTntBankLimit() > f.getTnt()) {
 
-                                    itemInv.remove(itemStack);
+                                        fac.addTnt(itemStack.getAmount());
+                                        addedAmt += itemStack.getAmount();
 
-                                }else{
-                                    break;
+                                        itemInv.remove(itemStack);
+
+                                    } else {
+                                        break;
+                                    }
+
                                 }
 
-                            }
+                                int amt = collect.stream().flatMapToInt(i -> IntStream.of(i.getAmount())).reduce(0, Integer::sum);
 
-                            int amt = collect.stream().flatMapToInt(i -> IntStream.of(i.getAmount())).reduce(0, Integer::sum);
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration()
+                                        .amtAdded.replace("{amount}", addedAmt + "").replace("{totalAmtInChest}", amt + "")));
 
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration()
-                                    .amtAdded.replace("{amount}", addedAmt+"").replace("{totalAmtInChest}", amt+"")));
-
-                        }else{
+                            } else{
+                                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().differentFaction));
+                                }
+                        }else {
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().invalidFaction));
                         }
+
                     }
-
                 }
-
             }
 
         }
@@ -150,7 +156,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
                     itemStack = CraftItemStack.asCraftMirror(stack);
 
-                    if(!player.getInventory().addItem().isEmpty()){
+                    if(!player.getInventory().addItem(itemStack).isEmpty()){
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().failedItemAdd));
                     }
 
@@ -158,7 +164,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
 
                 }else{
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().invalidUser));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().differentFaction));
                 }
                 return true;
 
@@ -208,6 +214,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
         public String failedItemAdd = "&cFailed to add this to their inventory. It is most likely full";
         public String invalidFaction = "&cYou must be in a faction to use this item";
         public String amtAdded = "Added {amount} / {totalAmtInChest} tnt to your faction's bank";
+        public String differentFaction = "&cYou must be a member of this faction to use this item on this block";
 
     }
 
