@@ -73,7 +73,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
                                 Inventory itemInv = itemInvHolder.getInventory();
 
-                                List<ItemStack> collect = Arrays.stream(itemInv.getContents()).filter(i -> i.getType() == Material.TNT).collect(Collectors.toList());
+                                List<ItemStack> collect = Arrays.stream(itemInv.getContents()).filter(i -> i != null && i.getType() == Material.TNT).collect(Collectors.toList());
 
                                 Faction fac = p.getFaction();
                                 int addedAmt = 0;
@@ -164,7 +164,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
 
 
                 }else{
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().differentFaction));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().invalidUser));
                 }
                 return true;
 
@@ -213,7 +213,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
         public String itemAdded = "&6 Added item: {item} to your inventory";
         public String failedItemAdd = "&cFailed to add this to their inventory. It is most likely full";
         public String invalidFaction = "&cYou must be in a faction to use this item";
-        public String amtAdded = "Added {amount} / {totalAmtInChest} tnt to your faction's bank";
+        public String amtAdded = "&2Added &6{amount} / {totalAmtInChest} &ctnt &2to your faction's bank";
         public String differentFaction = "&cYou must be a member of this faction to use this item on this block";
 
     }
