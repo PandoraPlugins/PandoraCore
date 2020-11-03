@@ -97,6 +97,7 @@ public class TNTBankItem extends Patch<Packet<?>> implements ICommandExecutor {
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration()
                                         .amtAdded.replace("{amount}", addedAmt + "").replace("{totalAmtInChest}", amt + "")));
 
+                                event.setCancelled(true);
                             } else{
                                     p.sendMessage(ChatColor.translateAlternateColorCodes('&', getConfiguration().getConfiguration().differentFaction));
                                 }
