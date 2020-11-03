@@ -7,6 +7,7 @@ import com.azortis.azortislib.configuration.Config;
 import dev.minecraftplugin.pandoracore.PandoraCore;
 import dev.minecraftplugin.pandoracore.patch.Patch;
 import net.minecraft.server.v1_8_R3.Packet;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,7 +37,7 @@ public class CustomPotionPatch extends Patch<Packet<?>> implements ICommandExecu
         this.plugin = core;
         Command c = new CommandBuilder()
                 .setPlugin(core)
-                .setUsage("/custpotion <player> <potion data>")
+                .setUsage("/custpotion <player> <amount> <\"Potion Name\"> <potion data>")
                 .setName("custpotion")
                 .setDescription("Custom Potion Effects")
                 .setPermission("custompotion.give")
@@ -73,18 +74,26 @@ public class CustomPotionPatch extends Patch<Packet<?>> implements ICommandExecu
 
                 if(given != null){
 
-                    String potionData = String.join(" ", args).substring(given.getName().length()+1);
+                    try {
+                        String name = getQuotes(String.join(" ", args));
+                        String amount = args[1];
+                        if (!NumberUtils.isNumber(amount)) amount = "1";
+                        String potionData = String.join(" ", args);
+                        potionData = potionData.substring(potionData.lastIndexOf("\"") + 1).trim();
 
-                    List<Map<String, String>> potionMap = getPotionDataFromString(potionData.toLowerCase());
+                        List<Map<String, String>> potionMap = getPotionDataFromString(potionData.toLowerCase());
 
-                    ItemStack pot = getPotion(5, potionMap, getQuotes(String.join(" ", args)));
-                    given.getInventory().addItem(pot);
+                        ItemStack pot = getPotion(Integer.parseInt(amount), potionMap, ChatColor.translateAlternateColorCodes('&', name));
+                        given.getInventory().addItem(pot);
+                    }catch(Exception e){
+                        sender.sendMessage(ChatColor.RED+"Please follow the appropriate format: <name> <amount> <\"Potion Name\"> <Attributes>");
+                        return false;
+                    }
 
-                    return true;
                 }else{
                     sender.sendMessage(ChatColor.RED+"Invalid Player");
-                    return true;
                 }
+                return true;
 
             }
 
@@ -113,11 +122,11 @@ public class CustomPotionPatch extends Patch<Packet<?>> implements ICommandExecu
 
             potMeta.addCustomEffect(new PotionEffect(PotionEffectType.getByName(potDatum.get("effect")),
                     Integer.parseInt(potDatum.get("duration")),
-                    Integer.parseInt(potDatum.get("power"))), true);
+                    Math.max(Integer.parseInt(potDatum.get("power"))-1, 0)), true);
 
             List<String> lore = potMeta.getLore() != null ? potMeta.getLore() : new ArrayList<>();
             lore.add(ChatColor.BLUE+ StringUtils.capitalize(potDatum.get("effect").replace("_", " ")) + ChatColor.WHITE + ": " +
-                    ChatColor.GRAY + potDatum.get("power") + " (" +
+                    ChatColor.GRAY + (Integer.parseInt(potDatum.get("power"))+1) + " (" +
                     formatSeconds((Integer.parseInt(potDatum.get("duration"))/20)) + ")");
             potMeta.setLore(lore);
 
@@ -136,8 +145,8 @@ public class CustomPotionPatch extends Patch<Packet<?>> implements ICommandExecu
         int minutes = (int) Math.floor(timeInSeconds % 3600 / 60);
         int hours = (int) Math.floor(timeInSeconds / 3600);
 
-        String HH = ((hours       < 10) ? "0" : "") + hours;
-        String MM = ((minutes     < 10) ? "0" : "") + minutes;
+        String HH = ((hours < 10) ? "0" : "") + hours;
+        String MM = ((minutes < 10) ? "0" : "") + minutes;
         String SS = ((secondsLeft < 10) ? "0" : "") + secondsLeft;
 
         return HH + ":" + MM + ":" + SS;
