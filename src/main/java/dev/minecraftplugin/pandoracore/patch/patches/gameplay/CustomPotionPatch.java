@@ -121,13 +121,13 @@ public class CustomPotionPatch extends Patch<Packet<?>> implements ICommandExecu
         for (Map<String, String> potDatum : potData) {
 
             potMeta.addCustomEffect(new PotionEffect(PotionEffectType.getByName(potDatum.get("effect")),
-                    Integer.parseInt(potDatum.get("duration")),
+                    Integer.parseInt(potDatum.get("duration"))*20,
                     Math.max(Integer.parseInt(potDatum.get("power"))-1, 0)), true);
 
             List<String> lore = potMeta.getLore() != null ? potMeta.getLore() : new ArrayList<>();
             lore.add(ChatColor.BLUE+ StringUtils.capitalize(potDatum.get("effect").replace("_", " ")) + ChatColor.WHITE + ": " +
                     ChatColor.GRAY + (Integer.parseInt(potDatum.get("power"))+1) + " (" +
-                    formatSeconds((Integer.parseInt(potDatum.get("duration"))/20)) + ")");
+                    formatSeconds((Integer.parseInt(potDatum.get("duration")))) + ")");
             potMeta.setLore(lore);
 
 
