@@ -13,7 +13,8 @@ public enum EPatch {
     NOQUILL(new DenyItemPatch()),
     RENAME(new RenameItemPatch()),
     COOLDOWN(new CooldownPatch()),
-    TNTBANKITEM(new TNTBankItem());
+    TNTBANKITEM(new TNTBankItem()),
+    CUSTOMPOTIONPATCH(new CustomPotionPatch());
 
     private final Patch<?> patch;
 
