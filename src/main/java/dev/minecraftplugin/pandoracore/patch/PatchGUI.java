@@ -33,6 +33,7 @@ public class PatchGUI {
                         page.isGlobal = true;
                         page.page = finalI;
                         page.name = pageName + "Page: &b" + (finalI + 1);
+                        page.closeAction = (event, view) -> PandoraCore.getInstance().getPatchManager().getPatchesData().saveConfig();
                         Item[] items = new Item[pageSize];
                         for (int ia = 0; ia < EPatch.values().length; ia++) {
                             final boolean enabled = EPatch.values()[ia].getPatch().isEnabled();

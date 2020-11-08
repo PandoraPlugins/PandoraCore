@@ -33,6 +33,7 @@ public class ModuleGUI {
                         page.isGlobal = true;
                         page.page = finalI;
                         page.name = pageName + "Page: &b" + (finalI + 1);
+                        page.closeAction = (event, view) -> PandoraCore.getInstance().getModuleManager().getModuleData().saveConfig();
                         Item[] items = new Item[pageSize];
                         for (int ia = 0; ia < EModule.values().length; ia++) {
                             final boolean enabled = EModule.values()[ia].getModule().isEnabled();

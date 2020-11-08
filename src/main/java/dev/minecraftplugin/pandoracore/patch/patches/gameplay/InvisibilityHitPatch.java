@@ -20,7 +20,7 @@ public class InvisibilityHitPatch extends Patch<Packet<?>> {
 
     @Override
     public void enable(PandoraCore core) {
-        // todo: this is broken, make sure it works.
+
     }
 
     @EventHandler
@@ -29,6 +29,9 @@ public class InvisibilityHitPatch extends Patch<Packet<?>> {
             Player p = (Player) entityDamageByEntityEvent.getEntity();
             for (PotionEffect activePotionEffect : p.getActivePotionEffects()) {
                 if (activePotionEffect.getType() == PotionEffectType.INVISIBILITY) {
+                    if (entityDamageByEntityEvent.getDamager().getType() == EntityType.ENDER_PEARL) {
+                        return;
+                    }
                     if (entityDamageByEntityEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                         if (entityDamageByEntityEvent.getDamager().getType() == EntityType.PLAYER) {
                             p.removePotionEffect(PotionEffectType.INVISIBILITY);
