@@ -14,6 +14,7 @@ public enum EPatch {
     RENAME(new RenameItemPatch()),
     COOLDOWN(new CooldownPatch()),
     TNTBANKITEM(new TNTBankItem()),
+    PEARLOUTOFBORDERPATCH(new PearlOutOfBorderPatch()),
     CUSTOMPOTIONPATCH(new CustomPotionPatch());
 
     private final Patch<?> patch;
